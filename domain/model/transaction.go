@@ -36,7 +36,7 @@ type Transaction struct {
 }
 
 func (t *Transaction) isValid() error {
-	_, err := govalidator.ValidadeStruct(t)
+	_, err := govalidator.ValidateStruct(t)
 
 	if t.Amount <= 0 {
 		return errors.New("the amountmust be greater than zero")
@@ -46,7 +46,7 @@ func (t *Transaction) isValid() error {
 		return errors.New("invalid status for the transaction")
 	}
 
-	if t.PixKeyTo.AccountID == t.AccountFromID {
+	if t.PixKeyTo.AccountID == t.AccountFrom.ID {
 		return errors.New("the source and description account cannot be the same")
 	}
 
@@ -58,7 +58,7 @@ func (t *Transaction) isValid() error {
 }
 
 func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, description string) (*Transaction, error) {
-	pixKey := Transaction{
+	transaction := Transaction{
 		AccountFrom: accountFrom,
 		Amount:      amount,
 		PixKeyTo:    pixKeyTo,
@@ -67,7 +67,7 @@ func NewTransaction(accountFrom *Account, amount float64, pixKeyTo *PixKey, desc
 	}
 
 	transaction.ID = uuid.NewV4().String()
-	transaction.created_at = time.Now()
+	transaction.CreatedAt = time.Now()
 
 	err := transaction.isValid()
 

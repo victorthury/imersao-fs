@@ -9,14 +9,14 @@ import (
 
 type Account struct {
 	Base      `valid:"required"`
-	OwnerName string    `json: "owner_name" valid:"notnull"`
+	OwnerName string    `json:"owner_name" valid:"notnull"`
 	Bank      *Bank     `valid:"-"`
-	Number    string    `json: "number" valid:"notnull"`
+	Number    string    `json:"number" valid:"notnull"`
 	PixKeys   []*PixKey `valid:"-"`
 }
 
 func (account *Account) isValid() error {
-	_, err := govalidator.ValidadeStruct(account)
+	_, err := govalidator.ValidateStruct(account)
 
 	if err != nil {
 		return err
@@ -32,8 +32,8 @@ func NewAccount(bank *Bank, number string, ownerName string) (*Account, error) {
 		Number:    number,
 	}
 
-	Account.ID = uuid.NewV4().String()
-	Account.created_at = time.Now()
+	account.ID = uuid.NewV4().String()
+	account.CreatedAt = time.Now()
 
 	err := account.isValid()
 

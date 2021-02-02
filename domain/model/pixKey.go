@@ -22,11 +22,11 @@ type PixKey struct {
 	Key       string   `json:"key" valid:notnull`
 	AccountID string   `json:"account_id" valid:notnull`
 	Account   *Account `valid:"-"`
-	State     string   `json:"state" valid:notnull`
+	Status     string   `json:"state" valid:notnull`
 }
 
 func (pixKey *PixKey) isValid() error {
-	_, err := govalidator.ValidadeStruct(pixKey)
+	_, err := govalidator.ValidateStruct(pixKey)
 
 	if pixKey.Kind != "email" && pixKey.Kind != "cpf" {
 		return errors.New("invalid type of key")
@@ -47,12 +47,12 @@ func NewPixKey(kind string, account *Account, key string) (*PixKey, error) {
 	pixKey := PixKey{
 		Kind:      kind,
 		Key:       key,
-		AccountId: account,
-		State:     "active",
+		Account: account,
+		Status:     "active",
 	}
 
 	pixKey.ID = uuid.NewV4().String()
-	pixKey.created_at = time.Now()
+	pixKey.CreatedAt = time.Now()
 
 	err := pixKey.isValid()
 
